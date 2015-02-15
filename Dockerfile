@@ -1,4 +1,4 @@
-FROM java:8-jdk
+FROM dockerfile/java:oracle-java8
 
 #Install utils
 RUN apt-get install -y wget
@@ -11,14 +11,10 @@ RUN wget -q -O - http://apache.mirrors.pair.com/zookeeper/zookeeper-3.4.6/zookee
 
 ADD zoo.cfg /etc/zookeeper/conf/zoo.cfg
 
-EXPOSE 2181 2888 3888
-
 # Deploy startup script
-ADD init.sh /usr/local/bin/start-zookeeper
-RUN chmod 755 /usr/local/bin/start-zookeeper
+ADD init.sh /etc/zookeeper/bin/start-zookeeper
+RUN chmod 755 /etc/zookeeper/bin/start-zookeeper
 
-#CMD /usr/local/bin/start-zookeeper
-#ENTRYPOINT ["/etc/zookeeper/bin/zkServer.sh"]
-#CMD ["start-foreground"]
+EXPOSE 2181 2888 3888 5111
 
-CMD /bin/bash
+CMD /etc/zookeeper/bin/start-zookeeper

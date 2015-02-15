@@ -1,10 +1,13 @@
 #!/bin/sh
 
-if [ $LISTEN_ADDRESS ] && [ $ZOO_ID ]; then
-    echo $ZOO_ID > /var/lib/zookeeper/myid
-    echo $ENSEMBLE_IPS >> /opt/zookeeper/conf/zoo.cfg
+if [ "$ENSEMBLE_IPS" ] && [ "$ZOO_ID" ]; then
+    echo "$ZOO_ID" > /var/lib/zookeeper/myid
+    echo "\n$ENSEMBLE_IPS" | tr ',' '\n' >> /etc/zookeeper/conf/zoo.cfg
 
-    echo "Zoo ID: $ZOO_ID\n Ensemble:\n $ENSEMBLE_IPS"
+    echo "===> Zoo ID: $ZOO_ID\n===> Ensemble:"
+    echo "$ENSEMBLE_IPS" | tr ',' '\n'
 fi
 
 echo Starting ZooKeeper
+
+/etc/zookeeper/bin/zkServer.sh start-foreground
